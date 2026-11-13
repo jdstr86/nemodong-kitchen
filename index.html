@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+<title>네모동글 부엌 공식</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* 레이아웃: 위에 이름·바로가기, '먼저 알아두기' 넓은 카드, 아래로 공식 카드가 2열(폰은 1열), 카드마다 언제 쓰는지 → 공식 → 계산기 → 결과 문장 */
+:root{
+  --bg:#f3f6f1; --paper:#ffffff; --ink:#1d2a24; --muted:#5d6b63; --line:#d9e2d8;
+  --basil:#2f7a4f; --basil-soft:#e2f0e6; --yolk:#f2b705; --yolk-soft:#fff3c9; --chili:#c8432b;
+  --display:"Do Hyeon","Noto Sans KR",system-ui,sans-serif; --body:"Noto Sans KR",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121815; --paper:#1a221e; --ink:#e7efe9; --muted:#9db0a5; --line:#2b3730;
+  --basil:#6cc795; --basil-soft:#1f3328; --yolk:#f5c842; --yolk-soft:#3a3214; --chili:#f07a62; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121815; --paper:#1a221e; --ink:#e7efe9; --muted:#9db0a5; --line:#2b3730;
+  --basil:#6cc795; --basil-soft:#1f3328; --yolk:#f5c842; --yolk-soft:#3a3214; --chili:#f07a62; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:grid;gap:10px;margin-bottom:22px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.1;margin:0;text-wrap:balance}
+h1 span{background:linear-gradient(transparent 62%,var(--yolk-soft) 62%)}
+.lead{color:var(--muted);margin:0;max-width:62ch}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+nav a{font-size:14px;color:var(--basil);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:5px 12px;border-radius:999px}
+nav a:hover,nav a:focus-visible{border-color:var(--basil);outline:none}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.wide{grid-column:1/-1}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;display:grid;gap:12px;align-content:start;min-width:0}
+.card h2{font-family:var(--display);font-weight:400;font-size:27px;margin:0;line-height:1.2}
+.when{margin:0;font-size:15px}
+.when b{color:var(--basil);font-weight:700;margin-right:6px}
+.f{font-weight:500;font-size:15px;background:var(--basil-soft);border-radius:8px;padding:8px 12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input,select{font:500 16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;width:120px}
+select{width:auto;max-width:100%}
+input:focus-visible,select:focus-visible{outline:2px solid var(--basil);outline-offset:1px}
+.ans{background:var(--yolk-soft);border-radius:10px;padding:10px 14px;font-size:16px;font-variant-numeric:tabular-nums}
+.ans strong{font-size:19px}
+.tip{font-size:14px;color:var(--muted);margin:0}
+.tip strong{color:var(--chili);font-weight:500}
+.basics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.basics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.basic{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.basic h3{margin:0 0 2px;font-size:16px}
+.basic p{margin:0;font-size:14px;color:var(--muted)}
+.basic .big{font-family:var(--mono);font-weight:600;font-size:20px;color:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td,th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+th{font-weight:500;color:var(--muted);font-size:13px}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+footer{margin-top:26px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header>
+  <h1><span>네모동글 부엌 공식</span></h1>
+  <p class="lead">요리 처음이어도 괜찮아요, 레시피에 적힌 숫자를 넣으면 네모가 얼마나 넣어야 하는지 바로 계산해 줘요, 동글이처럼 밥숟가락으로 대충 재면 안 돼요</p>
+  <nav aria-label="바로가기">
+    <a href="#basic">먼저 알아두기</a><a href="#measure">숟가락 계산</a><a href="#serve">인분 늘리기</a><a href="#rice">밥물</a><a href="#salt">국 간</a><a href="#pasta">파스타</a><a href="#jeon">전 반죽</a><a href="#bread">빵 반죽</a><a href="#meat">고기</a><a href="#egg">계란</a><a href="#oven">오븐 온도</a>
+  </nav>
+</header>
+
+<main class="grid">
+  <section class="card wide" id="basic">
+    <h2>먼저 알아두기</h2>
+    <p class="when">레시피에 나오는 숟가락과 컵은 집에서 밥 먹는 숟가락, 물컵이랑 달라요</p>
+    <div class="basics">
+      <div class="basic"><h3>1큰술</h3><p class="big">15ml</p><p>계량스푼 중 큰 것, 밥숟가락으로는 약 1.5번</p></div>
+      <div class="basic"><h3>1작은술</h3><p class="big">5ml</p><p>계량스푼 중 작은 것, 찻숟가락 하나쯤</p></div>
+      <div class="basic"><h3>1컵</h3><p class="big">200ml</p><p>계량컵 기준, 종이컵 가득은 약 180ml</p></div>
+      <div class="basic"><h3>한 꼬집</h3><p class="big">아주 조금</p><p>엄지와 검지로 살짝 집은 양</p></div>
+    </div>
+    <p class="tip"><strong>계량스푼이 없다면</strong> 밥숟가락에 평평하게 담아 1.5번 = 1큰술로 생각하면 크게 틀리지 않아요 · '적당히'는 조금 넣고 맛본 뒤 더 넣으라는 뜻이에요</p>
+  </section>
+
+  <section class="card" id="measure">
+    <h2>숟가락 · 컵 바꾸기</h2>
+    <p class="when"><b>이럴 때</b>레시피에 '2큰술'이라는데 작은 숟가락밖에 없을 때</p>
+    <div class="f">큰술 1번 = 작은술 3번 · 1컵 = 큰술 13번 하고 조금 더</div>
+    <div class="row">
+      <label for="m-n">레시피에 적힌 양<input id="m-n" type="number" min="0" step="0.5" value="2"></label>
+      <label for="m-u">단위<select id="m-u"><option value="15" selected>큰술</option><option value="5">작은술</option><option value="200">컵</option><option value="180">종이컵</option><option value="1">ml</option></select></label>
+    </div>
+    <div class="ans" id="m-out"></div>
+    <p class="tip">미국 레시피의 1cup은 약 240ml라서 조금 더 많아요</p>
+  </section>
+
+  <section class="card" id="serve">
+    <h2>인분 늘리기 · 줄이기</h2>
+    <p class="when"><b>이럴 때</b>2인분 레시피로 3명이 먹을 만큼 만들고 싶을 때</p>
+    <div class="f">먹을 사람이 늘어난 만큼 모든 재료를 똑같이 늘려요 (2인분 → 3인분이면 모두 1배 반)</div>
+    <div class="row">
+      <label for="s-a">레시피는 몇 인분<input id="s-a" type="number" min="1" value="2"></label>
+      <label for="s-b">만들 인분<input id="s-b" type="number" min="1" value="3"></label>
+    </div>
+    <p class="tip" style="margin:0">레시피에 적힌 재료 하나를 골라서 그대로 적어 보세요 (예: 간장 2큰술)</p>
+    <div class="row">
+      <label for="s-n">재료 이름<input id="s-n" type="text" value="간장"></label>
+      <label for="s-q">레시피에 적힌 양<input id="s-q" type="number" min="0" step="0.5" value="2"></label>
+      <label for="s-u">단위<select id="s-u"><option selected>큰술</option><option>작은술</option><option>컵</option><option>g</option><option>개</option></select></label>
+    </div>
+    <div class="ans" id="s-out"></div>
+    <p class="tip"><strong>짠 양념은 조금 덜</strong> 소금, 간장, 설탕은 늘어난 만큼 다 넣으면 짜기 쉬워요, 덜 넣고 맛보면서 채우세요</p>
+  </section>
+
+  <section class="card" id="rice">
+    <h2>밥 물 맞추기</h2>
+    <p class="when"><b>이럴 때</b>냄비나 밥솥에 물을 얼마나 부을지 모를 때</p>
+    <div class="f">물은 쌀보다 조금 더 (쌀 1컵이면 물 1.1~1.2컵)</div>
+    <div class="row">
+      <label for="r-n">쌀 (컵)<input id="r-n" type="number" min="0" step="0.5" value="2"></label>
+      <label for="r-k">어떤 쌀<select id="r-k"><option value="1.0,1.1">올해 나온 햅쌀</option><option value="1.1,1.2" selected>보통 쌀</option><option value="1.2,1.3">오래된 쌀 · 잡곡 섞음</option></select></label>
+    </div>
+    <div class="ans" id="r-out"></div>
+    <p class="tip">쌀을 30분 불렸다면 물을 조금 줄여요 · 밥솥 안쪽에 눈금이 있으면 그 눈금이 제일 정확해요</p>
+  </section>
+
+  <section class="card" id="salt">
+    <h2>국 간 맞추기</h2>
+    <p class="when"><b>이럴 때</b>국이나 찌개에 소금을 얼마나 넣을지 감이 안 올 때</p>
+    <div class="f">물 1리터(1,000ml)에 소금 8g 정도가 딱 알맞은 간</div>
+    <div class="row">
+      <label for="t-v">물 양 (ml)<input id="t-v" type="number" min="0" step="100" value="1000"></label>
+      <label for="t-p">간<select id="t-p"><option value="0.8" selected>보통</option><option value="1">조금 짭짤하게</option><option value="0.6">싱겁게</option></select></label>
+    </div>
+    <div class="ans" id="t-out"></div>
+    <p class="tip">간장이나 된장을 넣는 국은 그것만으로도 짜요, 소금은 마지막에 맛보고 넣으세요</p>
+  </section>
+
+  <section class="card" id="pasta">
+    <h2>파스타 삶기</h2>
+    <p class="when"><b>이럴 때</b>스파게티 면을 삶을 때</p>
+    <div class="f">한 사람에 면 100g · 물 1리터 · 소금 1큰술 조금 안 되게(10g)</div>
+    <div class="row"><label for="p-n">먹을 사람 수<input id="p-n" type="number" min="1" value="2"></label></div>
+    <div class="ans" id="p-out"></div>
+    <p class="tip">면 삶은 물을 한 국자 남겨 두었다가 소스에 넣으면 소스가 면에 잘 붙어요 · 면 100g은 500원 동전 크기만큼 쥔 양이에요</p>
+  </section>
+
+  <section class="card" id="jeon">
+    <h2>부침개 반죽</h2>
+    <p class="when"><b>이럴 때</b>김치전, 파전 반죽을 만들 때</p>
+    <div class="f">부침가루와 물을 거의 같은 양으로 (물을 조금 덜)</div>
+    <div class="row"><label for="j-n">부침가루 (컵)<input id="j-n" type="number" min="0" step="0.5" value="1"></label></div>
+    <div class="ans" id="j-out"></div>
+    <p class="tip">숟가락으로 떠서 주르륵 흐르면 딱 좋아요 · 바삭하게 하려면 차가운 물을 쓰세요 · 김치전은 김치 국물만큼 물을 빼요</p>
+  </section>
+
+  <section class="card" id="bread">
+    <h2>빵 반죽</h2>
+    <p class="when"><b>이럴 때</b>집에서 식빵이나 피자 반죽을 처음 해볼 때</p>
+    <div class="f">밀가루 무게만 정하면 나머지 재료가 정해져요</div>
+    <div class="row"><label for="b-n">밀가루 (g)<input id="b-n" type="number" min="0" step="50" value="500"></label></div>
+    <div class="ans" id="b-out"></div>
+    <p class="tip">빵은 숟가락보다 저울로 재야 실패가 적어요 · 마트에서 파는 가루 이스트(인스턴트) 기준이에요</p>
+  </section>
+
+  <section class="card" id="meat">
+    <h2>고기 구운 뒤 기다리기</h2>
+    <p class="when"><b>이럴 때</b>스테이크나 두꺼운 고기를 구웠을 때</p>
+    <div class="f">구운 시간의 절반만큼 그대로 두었다가 썰어요</div>
+    <div class="row"><label for="g-n">구운 시간 (분)<input id="g-n" type="number" min="0" step="1" value="6"></label></div>
+    <div class="ans" id="g-out"></div>
+    <p class="tip">바로 썰면 고기 즙이 다 흘러나와 퍽퍽해져요 · <strong>닭고기 · 돼지고기 · 다진 고기</strong>는 속까지 하얗게 완전히 익혀야 해요 (속 온도 75℃에서 1분 넘게)</p>
+  </section>
+
+  <section class="card" id="egg">
+    <h2>계란 삶기</h2>
+    <p class="when"><b>이럴 때</b>원하는 노른자 상태로 삶고 싶을 때, 물이 끓기 시작하면 계란을 넣고 시간을 재요</p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>원하는 상태</th><th>시간</th><th>노른자는</th></tr></thead>
+      <tbody>
+        <tr><td>반숙</td><td class="n">6~7분</td><td>주르륵 흘러요</td></tr>
+        <tr><td>촉촉한 반숙</td><td class="n">8분</td><td>가운데만 말랑해요</td></tr>
+        <tr><td>완숙</td><td class="n">10~12분</td><td>다 익어서 포슬포슬해요</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="tip">냉장고에서 바로 꺼낸 계란 기준이에요 · 다 삶으면 바로 찬물에 담가야 껍질이 잘 까져요</p>
+  </section>
+
+  <section class="card" id="oven">
+    <h2>오븐 온도 바꾸기</h2>
+    <p class="when"><b>이럴 때</b>외국 레시피에 350°F처럼 처음 보는 온도가 나올 때</p>
+    <div class="f">°F(화씨)는 미국에서 쓰는 온도, 우리 오븐은 ℃(섭씨)</div>
+    <div class="row">
+      <label for="o-n">온도<input id="o-n" type="number" step="5" value="350"></label>
+      <label for="o-u">레시피 단위<select id="o-u"><option value="F" selected>°F (화씨)</option><option value="C">℃ (섭씨)</option></select></label>
+    </div>
+    <div class="ans" id="o-out"></div>
+    <p class="tip">에어프라이어는 오븐보다 빨리 익어요, 오븐 레시피 시간보다 조금 일찍 열어 확인하세요</p>
+  </section>
+</main>
+
+<footer>한국 기준 1컵 200ml, 1큰술 15ml, 1작은술 5ml · 종이컵 용량과 소금 무게는 대략값이에요</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const r=(v,d=0)=>{const k=10**d;return (Math.round(v*k)/k).toLocaleString('ko-KR')};
+// 소수 대신 '반', '1/4', '1/3' 같은 말로
+const FR=[[0,''],[0.25,'1/4'],[1/3,'1/3'],[0.5,'반'],[2/3,'2/3'],[0.75,'3/4'],[1,'']];
+function snap(v){let w=Math.floor(v+1e-9),f=v-w,best=FR[0];for(const x of FR){const third=(x[1]==='1/3'||x[1]==='2/3'); if(third&&Math.abs(f-x[0])>0.02) continue; if(Math.abs(f-x[0])<Math.abs(f-best[0])) best=x}
+  if(best[0]===1){w+=1;best=FR[0]} return {w,f:best[0],fw:best[1],about:Math.abs(w+best[0]-v)>0.04}}
+function spoonTxt(v,name){
+  if(v<0.15) return '아주 조금 (한 꼬집)';
+  const {w,f,fw,about}=snap(v), ab=about?'약 ':'';
+  if(w===0) return ab+name+' '+fw;
+  if(f===0) return ab+name+' '+w+'번';
+  if(f===0.5) return ab+name+' '+w+'번 반';
+  return ab+name+' '+w+'번과 '+fw;
+}
+function cupTxt(v){
+  const {w,f,fw,about}=snap(v), ab=about?'약 ':'';
+  if(w===0) return ab+(f===0.5?'반 컵':fw+'컵');
+  if(f===0) return ab+w+'컵';
+  if(f===0.5) return ab+w+'컵 반';
+  return ab+w+'컵과 '+fw;
+}
+function numTxt(v){ // 2.8 → 3보다 조금 적게
+  const n=Math.round(v);
+  if(Math.abs(v-n)<0.08) return String(n);
+  const {w,f,fw}=snap(v);
+  if(f===0.5) return w+('2459'.includes(String(w).slice(-1))?'와':'과')+' 1/2';
+  return v<n?n+'보다 조금 적게':n+'보다 조금 많이';
+}
+const unitName={15:'큰술',5:'작은술',200:'컵',180:'종이컵',1:'ml'};
+function calc(){
+  const n=+$('m-n').value||0, u=+$('m-u').value, ml=n*u;
+  const cupLine= ml<50 ? '이만큼은 컵 말고 숟가락으로 재요' : `계량컵으로 ${cupTxt(ml/200)} · 종이컵으로 ${cupTxt(ml/180)}`;
+  $('m-out').innerHTML=`<strong>${spoonTxt(ml/15,'큰술')}</strong> = ${spoonTxt(ml/5,'작은술')} = ${r(ml)}ml<br><span style="font-size:14px">${cupLine}</span>`;
+  const a=+$('s-a').value||1,b=+$('s-b').value||1,q=+$('s-q').value||0,m=b/a,nm=($('s-n').value||'재료').trim(),un=$('s-u').value;
+  const amt=(v)=>{ if(un==='큰술'||un==='작은술') return spoonTxt(v,un); if(un==='컵') return cupTxt(v); if(un==='g') return r(v)+'g';
+    const {w,f,fw,about}=snap(v); return (about?'약 ':'')+(w?w+'개':'')+(f===0.5?(w?' 반':'반 개'):(f?(w?'와 ':'')+fw+(w?'':'개'):'')); };
+  const mw=(()=>{const {w,f}=snap(m); if(m<1) return f===0.5&&!w?'절반으로 줄여요':'조금 줄여요'; if(f===0) return w+'배로 늘려요'; if(f===0.5) return w+'배 반으로 늘려요'; return '약 '+r(m,1)+'배로 늘려요'})();
+  const salty=/간장|소금|설탕|된장|고추장|액젓|굴소스|쌈장|맛술|식초/.test(nm);
+  $('s-out').innerHTML=`${nm} ${amt(q)} → <strong>${nm} ${amt(q*m)}</strong> 넣으면 돼요<br><span style="font-size:14px">${salty&&m>1?`짠 양념이라 먼저 ${amt(Math.max(q,Math.floor(q*(1+(m-1)*0.8)*2)/2))}만 넣고 맛본 뒤 더 넣어요`:`다른 재료도 모두 ${mw}`}</span>`;
+  const rn=+$('r-n').value||0,[lo,hi]=$('r-k').value.split(',').map(Number),wv=rn*(lo+hi)/2;
+  $('r-out').innerHTML=`쌀 ${cupTxt(rn)}이면 물 <strong>${cupTxt(wv)}</strong><br><span style="font-size:14px">쌀보다 물이 살짝 더 많으면 돼요 (약 ${r(wv*200,-1)}ml)</span>`;
+  const tv=+$('t-v').value||0,g=tv*(+$('t-p').value)/100;
+  $('t-out').innerHTML=`소금 <strong>${spoonTxt(g/5,'작은술')}</strong> (약 ${r(g)}g)<br><span style="font-size:14px">절반만 먼저 넣고 맛본 뒤 나머지를 채워요</span>`;
+  const pn=+$('p-n').value||1;
+  $('p-out').innerHTML=`면 <strong>${pn*100}g</strong> · 물 <strong>${pn}리터</strong> · 소금 <strong>${spoonTxt(pn*2,'작은술')}</strong>`;
+  const jn=+$('j-n').value||0;
+  $('j-out').innerHTML=`부침가루 ${cupTxt(jn)}에 물 <strong>${cupTxt(jn*0.9)}</strong><br><span style="font-size:14px">가루와 같은 양에서 조금 덜 부으면 돼요</span>`;
+  const bn=+$('b-n').value||0;
+  $('b-out').innerHTML=`물 <strong>${r(bn*.65,-1)}g</strong> · 소금 <strong>${r(bn*.02)}g</strong> · 이스트 <strong>${r(bn*.015)}g</strong> · 설탕 <strong>${r(bn*.06)}g</strong>`;
+  const gn=+$('g-n').value||0, half=snap(gn/2);
+  $('g-out').innerHTML=`불 끄고 <strong>${half.w?half.w+'분':''}${half.f===0.5?(half.w?' 반':'30초'):''}${!half.w&&half.f!==0.5?'1분쯤':''}</strong> 그대로 두었다가 썰기`;
+  const on=+$('o-n').value||0;
+  $('o-out').innerHTML=$('o-u').value==='F'?`${r(on)}°F = 우리 오븐 <strong>${r((on-32)*5/9,-1)}℃</strong>`:`${r(on)}℃ = <strong>${r(on*9/5+32,-1)}°F</strong>`;
+}
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calc));
+calc();
+</script>
+
+</body>
+</html>
